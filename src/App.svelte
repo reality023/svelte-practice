@@ -1,46 +1,63 @@
 <script>
-  import svelteLogo from './assets/svelte.svg'
-  import Counter from './lib/Counter.svelte'
+  let data = [
+    { id: 1, name: 'foo' },
+    { id: 2, name: 'bar' },
+    { id: 3, name: 'baz' }
+  ];
+
+  const add = () => {
+    data = [...data, { id: 4, name: 'qux' }];
+  };
+
+  const modify = () => {
+    data = data.map(item => {
+      if (item.id === 2) {
+        return { ...item, name: 'holy' };
+      }
+      return item;
+    });
+  };
+
+  const remove = (id) => {
+    data = data.filter(item => item.id !== id);
+  }
 </script>
 
 <main>
-  <div>
-    <a href="https://vitejs.dev" target="_blank" rel="noreferrer"> 
-      <img src="/vite.svg" class="logo" alt="Vite Logo" />
-    </a>
-    <a href="https://svelte.dev" target="_blank" rel="noreferrer"> 
-      <img src={svelteLogo} class="logo svelte" alt="Svelte Logo" />
-    </a>
+  <div class="wrapper">
+  {#each data as item}
+    <div class="item">{item.name}
+      <button on:click={() => remove(item.id)}>삭제</button>
+    </div>
+  {/each}
   </div>
-  <h1>Vite + Svelte</h1>
-
-  <div class="card">
-    <Counter />
-  </div>
-
-  <p>
-    Check out <a href="https://github.com/sveltejs/kit#readme" target="_blank" rel="noreferrer">SvelteKit</a>, the official Svelte app framework powered by Vite!
-  </p>
-
-  <p class="read-the-docs">
-    Click on the Vite and Svelte logos to learn more
-  </p>
+  <button on:click={add}>추가</button>
+  <button on:click={modify}>변경</button>
 </main>
 
 <style>
-  .logo {
-    height: 6em;
-    padding: 1.5em;
-    will-change: filter;
-    transition: filter 300ms;
+  .wrapper {
+    width: 500px;
+    margin: 20px auto;
   }
-  .logo:hover {
-    filter: drop-shadow(0 0 2em #646cffaa);
+
+  .item {
+    border: 1px solid #333;
+    padding: 10px;
+    border-radius: 5px;
   }
-  .logo.svelte:hover {
-    filter: drop-shadow(0 0 2em #ff3e00aa);
+
+  .item + .item {
+    margin-top: 10px;
   }
-  .read-the-docs {
-    color: #888;
+
+  button {
+    display: block;
+    margin: 20px auto;
+    padding: 10px 20px;
+    border: 1px solid #333;
+    border-radius: 5px;
+    background: #fff;
+    cursor: pointer;
   }
 </style>
